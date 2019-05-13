@@ -1,8 +1,8 @@
 {
-    "name": "YOUR-COMPONENT",
-    "version": "0.0.0",
+    "name": "doz-simple-slideshow",
+    "version": "0.0.1",
     "description": "[YOUR-COMPONENT-DESCRIPTION]",
-    "main": "dist/bundle.js",
+    "main": "build/bundle.js",
     "scripts": {
         "start": "webpack-dev-server --open",
         "build": "webpack --progress --mode=production",
@@ -35,8 +35,9 @@
         "babel-runtime": "^6.26.0",
         "chai": "^4.2.0",
         "css-loader": "^0.28.11",
-        "doz": "^1.16.6",
+        "doz": "^1.18.1",
         "hard-source-webpack-plugin": "^0.12.0",
+        "he": "^1.2.0",
         "ignore-styles": "^5.0.1",
         "jsdoc-to-markdown": "^4.0.1",
         "jsdom": "^11.12.0",

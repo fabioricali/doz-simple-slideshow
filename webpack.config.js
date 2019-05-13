@@ -4,6 +4,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
+const path = require('path');
 
 const HMRPlugin = isDevServer ? new webpack.HotModuleReplacementPlugin() : function(){};
 
@@ -24,11 +25,12 @@ module.exports = {
     mode: isDevServer ? 'development' : 'production',
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: './dist',
+        contentBase: './build',
         hot: true
     },
     entry: './index.js',
     output: {
+        path: path.resolve(__dirname, 'build'),
         filename: './bundle.min.js',
         library: libraryName,
         umdNamedDefine: true,

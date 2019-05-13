@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="DOZ - COMPONENT">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>DOZ - COMPONENT</title>
+    <script src="https://unpkg.com/doz@1.18.1/dist/doz.js"></script>
+    <script src="bundle.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        img {
+            width: 400px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+    Doz.component('a-other', {
+       template(h) {
+          return h`
+            <div>A OTHER</div>
+          `
+       }
+    });
+
+    new Doz({
+        root: '#app',
+        props: {
+            images: [
+                '<span style="background: red;">HELLO SLIDE</span>',
+                '<img src="https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">',
+                '<img src="https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">',
+                '<a-other/>',
+                '<img src="https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">',
+                '<img src="https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">',
+            ],
+            slideState: 'running'
+        },
+        template(h) {
+            return h`
+                <doz-simple-slideshow state="${this.props.slideState}" items="${this.slideSerialize(this.props.images)}"/>
+                <button onclick="this.props.slideState = 'running'">PLAY</button>
+                <button onclick="this.props.slideState = 'paused'">PAUSE</button>
+            `
+        }
+    });
+
+</script>
+</body>
+</html>

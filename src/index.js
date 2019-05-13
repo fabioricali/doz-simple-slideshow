@@ -1,129 +1,125 @@
-import {Component} from "doz";
+import Doz from 'doz'
+import he from 'he'
 
-export default class extends Component {
+const SEPARATOR = '{$' + Date.now() + '$}';
+
+Doz.use(function (Doz) {
+    Doz.mixin({
+        slideDeserialize(str) {
+            return he.decode(str)
+        },
+        slideSerialize(str) {
+
+            if (Array.isArray(str))
+                str = Object.assign([], str).join(SEPARATOR);
+
+            return he.encode(str, {
+                allowUnsafeSymbols: true
+            });
+        }
+    });
+});
+
+export default class extends Doz.Component {
 
     constructor(o) {
         super(o);
 
         this.props = {
-            images: []
+            items: [],
+            delay: '4s',
+            duration: '1s',
+            state: 'running'
         };
 
-        this._imagesDataUri = {};
-
         this.propsConvert = {
-            images(v) {
+            items: (v) => {
                 if (Array.isArray(v)) {
-                    /*if(/^http/.test(img.src)) {
-                        this._getDataUri(img.src).then(dataUri => {
-                            //this.props.images[i] = dataUri;
-                        })
-                    }*/
-
                     return v;
                 } else if (typeof v === 'string') {
-                    return v.split('|');
+                    v = v.split(SEPARATOR);
+                    return v;
                 }
             }
         };
+    }
 
-        this.propsListenerAsync = {
-            images: () => {
-                Array.from(this.ref.imageList.getElementsByTagName('img')).forEach((img, i) => {
-                    /*if(/^http/.test(img.src)) {
-                        this._getDataUri(img.src).then(dataUri => {
-                            //this.props.images[i] = dataUri;
-                        })
-                    }*/
-                    //document.body.appendChild(img.cloneNode())
-                });
-
-            }
-        };
+    canStart() {
+        this.props.state = this.props.items.length <= 1 ? 'paused' : 'running';
     }
 
     template(h) {
         return h`
 
             <style> 
-                .image-list {
+                .items-list {
                     position: relative;
+                    margin: 0;
+                    padding: 0;
                 }
                 
-                .image-list a {
+                .items-list li {
                     position: absolute;
+                    padding: 0;
+                    margin: 0;
+                    list-style: none;
+                    left: 0;
+                    top: 0;
                 }
 
-                .image-list a:nth-of-type(1) {
-                    animation-name: fader;
-                    animation-delay: 4s;
-                    animation-duration: 1s;
-                    z-index: 20;
+                .items-list li:nth-of-type(1) {
+                    animation-name: fadeOut;
+                    animation-delay: ${this.props.delay};
+                    animation-duration: ${this.props.duration};
+                    animation-play-state: ${this.props.state};
+                    z-index: 2;
                 }
                 
-                .image-list a:nth-of-type(2) {
-                    z-index: 10;
+                .items-list li:nth-of-type(2) {
+                    opacity: 0;
+                    animation-name: fadeIn;
+                    animation-delay: ${this.props.delay};
+                    animation-duration: ${this.props.duration};
+                    animation-play-state: ${this.props.state};
                 }
                 
-                .image-list a:nth-of-type(n+3) {
+                .items-list li:nth-of-type(n+3) {
                     display: none;
                 }
                 
-                @keyframes fader {
-                    from { opacity: 1.0; }
-                    to   { opacity: 0.0; }
+                @keyframes fadeIn {
+                    from {opacity: 0;}
+                    to   {opacity: 1;}
+                }
+                
+                @keyframes fadeOut {
+                    from {opacity: 1;}
+                    to   {opacity: 0;}
                 }
             </style>
             
-            <div d-ref="imageList" class="image-list"> 
-                ${this.each(this.props.images, image => `
-                    <a forceupdate onanimationend="this._fadeComplete()">
-                        <img class="lazy" src="${image}">
-                    </a>
+            <ul d-ref="itemsList" class="items-list"> 
+                ${this.each(this.props.items, (item, i) => `
+                    <li d-ref="item${i}" forceupdate onanimationstart="this.animationStart()" onanimationend="this.animationEnd()">
+                        ${this.slideDeserialize(item)}
+                    </li>
                 `)}
-            </div>
+            </ul>
         `
     }
 
-    onMountAsync() {
-        //this.props.images.forEach(imageUrl => {
-           /*this._getDataUri(imageUrl, dataUri => {
-               this._imagesDataUri[imageUrl] = dataUri;
-           })
-
-            */
-           /*const img = document.createElement('img');
-           img.src = imageUrl;
-        });*/
+    animationStart() {
+        this.canStart();
     }
 
-    _fadeComplete() {
-        let tmp = Object.assign([], this.props.images);
-        tmp.push(tmp.shift());
-        this.props.images = tmp;
-    }
-
-    _getDataUri(url) {
-        return new Promise((resolve, reject) => {
-            const image = new Image();
-            image.crossOrigin = 'anonymous';
-
-            image.onload = function () {
-                const canvas = document.createElement('canvas');
-                canvas.width = this.naturalWidth;
-                canvas.height = this.naturalHeight;
-
-                canvas.getContext('2d').drawImage(this, 0, 0);
-
-                resolve(canvas.toDataURL('image/png'));
-            };
-
-            image.onerror = function(e) {
-                reject(e)
-            };
-
-            image.src = url;
-        });
-
+    animationEnd(e) {
+        // Reassign items array only if target is first
+        try {
+            if (e.target.parentNode.children[0] !== e.target) return;
+            let tmp = Object.assign([], this.props.items);
+            tmp.push(tmp.shift());
+            this.props.items = tmp;
+        } catch (e) {
+        }
     }
 };
