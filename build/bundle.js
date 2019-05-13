@@ -1,4 +1,4 @@
-// [DozSimpleSlideshow]  Build version: 0.0.1  
+// [DozSimpleSlideshow]  Build version: 0.0.2  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("doz"));
@@ -214,8 +214,13 @@ var _class = function (_Doz$Component) {
                 if (typeof v === 'string') {
                     v = v.split(SEPARATOR);
                 }
-                _this.canStart();
                 return v;
+            }
+        };
+
+        _this.propsListenerAsync = {
+            items: function items() {
+                _this.canStart();
             }
         };
         return _this;

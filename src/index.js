@@ -37,10 +37,15 @@ export default class extends Doz.Component {
                 if (typeof v === 'string') {
                     v = v.split(SEPARATOR);
                 }
-                this.canStart();
                 return v;
             }
         };
+
+        this.propsListenerAsync = {
+            items: () => {
+                this.canStart();
+            }
+        }
     }
 
     canStart() {

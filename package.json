@@ -1,6 +1,6 @@
 {
     "name": "doz-simple-slideshow",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "[YOUR-COMPONENT-DESCRIPTION]",
     "main": "build/bundle.js",
     "scripts": {
