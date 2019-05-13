@@ -34,12 +34,11 @@ export default class extends Doz.Component {
 
         this.propsConvert = {
             items: (v) => {
-                if (Array.isArray(v)) {
-                    return v;
-                } else if (typeof v === 'string') {
+                if (typeof v === 'string') {
                     v = v.split(SEPARATOR);
-                    return v;
                 }
+                this.canStart();
+                return v;
             }
         };
     }
