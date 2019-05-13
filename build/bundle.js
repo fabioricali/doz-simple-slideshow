@@ -211,12 +211,11 @@ var _class = function (_Doz$Component) {
 
         _this.propsConvert = {
             items: function items(v) {
-                if (Array.isArray(v)) {
-                    return v;
-                } else if (typeof v === 'string') {
+                if (typeof v === 'string') {
                     v = v.split(SEPARATOR);
-                    return v;
                 }
+                _this.canStart();
+                return v;
             }
         };
         return _this;
