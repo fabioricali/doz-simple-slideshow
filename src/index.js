@@ -1,23 +1,15 @@
 import Doz from 'doz'
-import he from 'he'
 
-const SEPARATOR = '{$' + Date.now() + '$}';
+const SEPARATOR = '{$%' + Date.now() + '%$}';
 
-Doz.use(function (Doz) {
-    Doz.mixin({
-        slideDeserialize(str) {
-            return he.decode(str)
-        },
-        slideSerialize(str) {
+Doz.mixin({
+    slideSerialize(str) {
 
-            if (Array.isArray(str))
-                str = Object.assign([], str).join(SEPARATOR);
+        if (Array.isArray(str))
+            str = Object.assign([], str).join(SEPARATOR);
 
-            return he.encode(str, {
-                allowUnsafeSymbols: true
-            });
-        }
-    });
+        return btoa(str);
+    }
 });
 
 export default class extends Doz.Component {
@@ -27,7 +19,7 @@ export default class extends Doz.Component {
 
         this.props = {
             items: [],
-            delay: '4s',
+            delay: '5s',
             duration: '1s',
             state: 'running'
         };
@@ -35,8 +27,10 @@ export default class extends Doz.Component {
         this.propsConvert = {
             items: (v) => {
                 if (typeof v === 'string') {
+                    v = atob(v);
                     v = v.split(SEPARATOR);
                 }
+
                 return v;
             }
         };
@@ -105,11 +99,19 @@ export default class extends Doz.Component {
             <ul d-ref="itemsList" class="items-list"> 
                 ${this.each(this.props.items, (item, i) => `
                     <li d-ref="item${i}" forceupdate onanimationstart="this.animationStart()" onanimationend="this.animationEnd()">
-                        ${this.slideDeserialize(item)}
+                        ${this.deSanitize(item)}
                     </li>
                 `)}
             </ul>
         `
+    }
+
+    deSanitize(str) {
+        str = str
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"');
+        return str
     }
 
     animationStart() {
@@ -117,7 +119,7 @@ export default class extends Doz.Component {
     }
 
     animationEnd(e) {
-        // Reassign items array only if target is first
+        // Reassign items array only if target is the first, the second is the next
         try {
             if (e.target.parentNode.children[0] !== e.target) return;
             let tmp = Object.assign([], this.props.items);

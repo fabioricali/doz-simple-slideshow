@@ -1,7 +1,7 @@
 {
     "name": "doz-simple-slideshow",
     "version": "0.0.3",
-    "description": "[YOUR-COMPONENT-DESCRIPTION]",
+    "description": "A simple slideshow for Doz",
     "main": "build/bundle.js",
     "scripts": {
         "start": "webpack-dev-server --open",
@@ -15,17 +15,20 @@
     },
     "keywords": [
         "doz",
-        "component"
+        "component",
+        "slideshow",
+        "images",
+        "gallery"
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/[YOUR-GITHUB-SPACE]/[YOUR-REPOSITORY].git"
+        "url": "git+https://github.com/fabioricali/doz-simple-slideshow.git"
     },
     "bugs": {
-        "url": "https://github.com/[YOUR-GITHUB-SPACE]/[YOUR-REPOSITORY]/issues"
+        "url": "https://github.com/fabioricali/doz-simple-slideshow/issues"
     },
-    "homepage": "https://github.com/[YOUR-GITHUB-SPACE]/[YOUR-REPOSITORY]#readme",
-    "author": "[YOUR-NAME]",
+    "homepage": "https://github.com/fabioricali/doz-simple-slideshow#readme",
+    "author": "Fabio Ricali",
     "license": "MIT",
     "devDependencies": {
         "babel-core": "^6.26.0",
@@ -37,7 +40,6 @@
         "css-loader": "^0.28.11",
         "doz": "^1.18.1",
         "hard-source-webpack-plugin": "^0.12.0",
-        "he": "^1.2.0",
         "ignore-styles": "^5.0.1",
         "jsdoc-to-markdown": "^4.0.1",
         "jsdom": "^11.12.0",
