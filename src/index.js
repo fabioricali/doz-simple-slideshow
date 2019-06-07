@@ -54,6 +54,7 @@ export default class extends Doz.Component {
                     position: relative;
                     margin: 0;
                     padding: 0;
+                    transition: all 300ms;
                 }
                 
                 .items-list li {
@@ -98,12 +99,19 @@ export default class extends Doz.Component {
             
             <ul d-ref="itemsList" class="items-list"> 
                 ${this.each(this.props.items, (item, i) => `
-                    <li d-ref="item${i}" forceupdate onanimationstart="this.animationStart()" onanimationend="this.animationEnd()">
+                    <li d-ref="item${i}" forceupdate 
+                        onanimationstart="this.animationStart()" 
+                        onanimationend="this.animationEnd()">
                         ${this.deSanitize(item)}
                     </li>
                 `)}
             </ul>
         `
+    }
+
+    onMountAsync() {
+        if (this.ref.item0)
+            this.ref.itemsList.style.height = this.ref.item0.offsetHeight + 'px';
     }
 
     deSanitize(str) {
@@ -115,6 +123,8 @@ export default class extends Doz.Component {
     }
 
     animationStart() {
+        if (this.ref.item1)
+            this.ref.itemsList.style.height = this.ref.item1.offsetHeight + 'px';
         this.canStart();
     }
 
