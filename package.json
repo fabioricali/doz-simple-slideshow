@@ -1,6 +1,6 @@
 {
     "name": "doz-simple-slideshow",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A simple slideshow for Doz",
     "main": "build/bundle.js",
     "scripts": {
