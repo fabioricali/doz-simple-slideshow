@@ -110,6 +110,8 @@ export default class extends Doz.Component {
     }
 
     _tryToSetInitialHeight() {
+        if (window.__DOZ_SSR_PATH__) return;
+
         if (!this.ref.item0.offsetParent) {
             window.requestAnimationFrame(() => this._tryToSetInitialHeight());
         } else {

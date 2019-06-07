@@ -227,6 +227,8 @@ var _class = function (_Doz$Component) {
         value: function _tryToSetInitialHeight() {
             var _this3 = this;
 
+            if (window.__DOZ_SSR_PATH__) return;
+
             if (!this.ref.item0.offsetParent) {
                 window.requestAnimationFrame(function () {
                     return _this3._tryToSetInitialHeight();
