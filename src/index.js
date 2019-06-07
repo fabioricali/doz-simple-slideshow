@@ -109,9 +109,17 @@ export default class extends Doz.Component {
         `
     }
 
+    _tryToSetInitialHeight() {
+        if (!this.ref.item0.offsetParent) {
+            window.requestAnimationFrame(() => this._tryToSetInitialHeight());
+        } else {
+            this.ref.itemsList.style.height = this.ref.item0.offsetHeight + 'px';
+        }
+    }
+
     onMountAsync() {
         if (this.ref.item0)
-            this.ref.itemsList.style.height = this.ref.item0.offsetHeight + 'px';
+            this._tryToSetInitialHeight();
     }
 
     deSanitize(str) {

@@ -223,9 +223,22 @@ var _class = function (_Doz$Component) {
             }));
         }
     }, {
+        key: '_tryToSetInitialHeight',
+        value: function _tryToSetInitialHeight() {
+            var _this3 = this;
+
+            if (!this.ref.item0.offsetParent) {
+                window.requestAnimationFrame(function () {
+                    return _this3._tryToSetInitialHeight();
+                });
+            } else {
+                this.ref.itemsList.style.height = this.ref.item0.offsetHeight + 'px';
+            }
+        }
+    }, {
         key: 'onMountAsync',
         value: function onMountAsync() {
-            if (this.ref.item0) this.ref.itemsList.style.height = this.ref.item0.offsetHeight + 'px';
+            if (this.ref.item0) this._tryToSetInitialHeight();
         }
     }, {
         key: 'deSanitize',
