@@ -98,7 +98,7 @@ export default class extends Doz.Component {
             </style>
             
             <ul d-ref="itemsList" class="items-list"> 
-                ${this.each(this.props.items, (item, i) => `
+                ${this.each(this.props.items, (item, i) => h`
                     <li d-ref="item${i}" forceupdate 
                         onanimationstart="this.animationStart()" 
                         onanimationend="this.animationEnd()">
