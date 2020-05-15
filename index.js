@@ -1,10 +1,11 @@
-import {define} from 'doz'
+import {define, createExtWebComponent} from 'doz'
 import cmp from './src'
 
 // expose component to global scope
 function register() {
     if (typeof window !== 'undefined') {
-        define('doz-simple-slideshow', cmp)
+        define('doz-simple-slideshow', cmp);
+        createExtWebComponent('doz-simple-slideshow');
     }
 }
 

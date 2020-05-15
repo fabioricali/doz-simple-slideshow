@@ -17,6 +17,8 @@ export default class extends Doz.Component {
     constructor(o) {
         super(o);
 
+        this._innerMode = false;
+
         this.props = {
             items: [],
             delay: '5s',
@@ -26,7 +28,7 @@ export default class extends Doz.Component {
 
         this.propsConvert = {
             items: (v) => {
-                if (typeof v === 'string') {
+                if (typeof v === 'string' && !this._innerMode) {
                     v = atob(v);
                     v = v.split(SEPARATOR);
                 }
@@ -50,6 +52,10 @@ export default class extends Doz.Component {
         return h`
 
             <style> 
+                * {
+                    box-sizing: border-box;
+                }
+                
                 .items-list {
                     position: relative;
                     margin: 0;
@@ -119,6 +125,30 @@ export default class extends Doz.Component {
         }
     }
 
+    onMount() {
+        this.loadFromInner();
+    }
+
+    loadFromInner() {
+        let possibleChildNodes = Array.from(this.getHTMLElement().children);
+        if (possibleChildNodes.length === 1) return;
+
+        this._innerMode = true;
+
+        this.prepareCommit();
+        this.props.items = [];
+        for (let i = 0; i < possibleChildNodes.length - 1; i++) {
+            let $child = possibleChildNodes[i];
+            this.props.items.push($child.outerHTML);
+            $child.style.display = 'none';
+            $child.style.visibility = 'hidden';
+            $child.style.position = 'absolute';
+            $child.style.left = '-9999px';
+            $child.style.top = '-9999px';
+        }
+        this.commit();
+    }
+
     onMountAsync() {
         if (this.ref.item0)
             this._tryToSetInitialHeight();
@@ -136,6 +166,7 @@ export default class extends Doz.Component {
         if (this.ref.item1)
             this.ref.itemsList.style.height = this.ref.item1.offsetHeight + 'px';
         this.canStart();
+        //console.log('animation')
     }
 
     animationEnd(e) {
@@ -145,6 +176,7 @@ export default class extends Doz.Component {
             let tmp = Object.assign([], this.props.items);
             tmp.push(tmp.shift());
             this.props.items = tmp;
+            console.log(tmp)
         } catch (e) {
         }
     }
